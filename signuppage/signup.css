@@ -1,0 +1,73 @@
+
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: "Arial", sans-serif;
+    background-color: #f3eee9;
+  }
+  
+  .container {
+    position: fixed;
+    top: 150px;                        /* 헤더 높이만큼 내려줌 */
+    left: 0;
+    width: 100%;
+    height: calc(100vh - 150px);       /* 헤더를 제외한 나머지 높이 */
+    display: flex;
+    justify-content: center;           /* 가로 중앙 */
+    align-items: center;               /* 세로 중앙 */
+    background-color: #f3eee9;
+  }
+  
+  .box {
+    background-color: #726e6b;
+    width: 500px;
+    padding: 40px 30px;      /* ✅ padding 줄임 */
+    border-radius: 12px;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+    height: 500px;            /* ✅ 높이 자동 지정 (기본값) */
+    max-height: 500px;       /* ✅ 선택: 너무 커지지 않게 제한 */
+  }
+  
+  .title {
+    font-size: 30px;
+    color: white;
+    text-align: center;
+    margin-bottom: 10px;
+  }
+  
+  .label {
+    display: block;
+    color: #e8e3dc;
+    margin-bottom: 8px;
+    margin-top: 8px;
+    font-weight: bold;
+  }
+  
+  .input {
+    width: 100%;
+    padding: 10px;
+    font-size: 15px;
+    border: none;
+    border-radius: 6px;
+    margin-bottom: 16px;
+    box-sizing: border-box;
+  }
+  
+  .button {
+    width: 100%;
+    padding: 16px;
+    font-size: 18px;
+    margin-top: 24px;
+    background-color: #e8e3dc;
+    color: #3a3a3a;
+    font-weight: bold;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+  
+
+
+  
+  

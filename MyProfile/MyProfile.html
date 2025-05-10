@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MyPage</title>
+  <link rel="stylesheet" href="../header/header.css" />
+  <link rel="stylesheet" href="../sidebar/sidebar.css" />
+  <link rel="stylesheet" href="MyProfile.css" />
+</head>
+<body>
+  <div id="header-container"></div>
+  <div id="sidebar-container"></div>
+
+  <div class="container">
+    <div class="main-content">
+      <h2>마이 프로필</h2>
+      <div class="profile-box">
+        <div class="profile-image"></div>
+        <button class="photo-btn">사진 변경</button>
+        <hr />
+        <label>현재 닉네임</label>
+        <input type="text" class="input-box" placeholder="현재 닉네임" disabled />
+        <label>변경 할 닉네임</label>
+        <input type="text" class="input-box" placeholder="변경할 닉네임 입력" />
+      </div>
+    </div>
+  </div>
+
+  <script>
+    fetch('../header/header.html')
+      .then(res => res.text())
+      .then(data => {
+        document.getElementById('header-container').innerHTML = data;
+      });
+
+    fetch('../sidebar/sidebar.html')
+      .then(res => res.text())
+      .then(data => {
+        document.getElementById('sidebar-container').innerHTML = data;
+      });
+  </script>
+</body>
+</html>

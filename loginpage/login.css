@@ -1,0 +1,130 @@
+body, html {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: "Arial", sans-serif;
+  background-color: #f3eee9;
+}
+
+.content {
+  margin-left: 200px;
+  width: calc(100% - 200px);
+  height: 100vh;
+  padding-top: 150px;
+  background-color: #f3eee9;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box;
+}
+
+.box {
+  width: 100%;
+  max-width: 500px;
+  padding: 60px 50px;
+  background-color: #726e6b;
+  border-radius: 12px;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+}
+
+.title {
+  font-size: 24px;
+  color: white;
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.label {
+  display: block;
+  color: #e8e3dc;
+  margin-bottom: 8px;
+  margin-top: 6px;
+  font-weight: bold;
+}
+
+.input {
+  width: 100%;
+  padding: 16px;
+  font-size: 18px;
+  border: none;
+  border-radius: 6px;
+  margin-bottom: 16px;
+  box-sizing: border-box;
+}
+
+.button {
+  width: 100%;
+  padding: 16px;
+  font-size: 18px;
+  margin-top: 24px;
+  background-color: #e8e3dc;
+  color: #3a3a3a;
+  font-weight: bold;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.container {
+  position: fixed;
+  top: 150px;              /* 헤더 높이 */
+  left: 0;                 /* 사이드바 제거 → 0으로 변경 */
+  width: 100%;             /* 전체 화면 너비 */
+  height: calc(100vh - 150px); /* 헤더 제외한 높이 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f3eee9;
+}
+
+
+.container-with-sidebar {
+  margin-left: 200px;
+  margin-top: 80px;
+  height: calc(100vh - 80px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.layout {
+  display: flex;
+  height: 100vh;
+}
+
+#sidebar-container {
+  width: 200px;
+  flex-shrink: 0;
+  height: calc(100vh - 150px);
+  position: fixed;
+  top: 150px;
+  left: 0;
+}
+
+.sidebar {
+  position: fixed;
+  top: 150px;
+  left: 0;
+  width: 200px;
+  height: calc(100vh - 150px);
+  background-color: #3b3b3b;
+}
+
+/* ✅ 작은 화면 대응 */
+@media (max-width: 768px) {
+  .container {
+      margin-left: 0;
+      width: 100%;
+      padding: 0 10px;
+      padding-top: 150px;
+  }
+
+  .box {
+      max-width: 90vw;
+      padding: 40px 20px;
+  }
+
+  #sidebar-container {
+      display: none;
+  }
+}
