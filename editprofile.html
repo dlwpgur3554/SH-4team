@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Edit Profile</title>
+  <link rel="stylesheet" href="MyPage.css" />
+  <style>
+    body {
+      margin: 0;
+      font-family: sans-serif;
+      background-color: #2B2B2B;
+      color: #F0E7DD;
+    }
+
+    .main-content {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    .edit-box {
+      background-color: #3A3A3A;
+      padding: 2rem;
+      border-radius: 16px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      width: 100%;
+      max-width: 400px;
+    }
+
+    .input-box {
+      width: 100%;
+      padding: 0.5rem;
+      margin: 0.5rem 0 1rem;
+      border: none;
+      border-radius: 8px;
+      background-color: #F0E7DD;
+      color: #2B2B2B;
+      font-size: 1rem;
+    }
+
+    button {
+      background-color: #F0E7DD;
+      color: #2B2B2B;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+      margin-bottom: 1rem;
+    }
+
+    label {
+      font-weight: bold;
+      margin-top: 1rem;
+      display: block;
+    }
+
+    .info-text {
+      font-size: 0.9rem;
+      margin-bottom: 1rem;
+    }
+
+    .error-text {
+      color: #FF6B6B;
+      font-size: 0.85rem;
+      margin-bottom: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="main-content">
+    <div class="edit-box">
+      <div id="password-section">
+        <p class="info-text">회원 정보는 기존 비밀번호를 입력하셔야 수정이 가능합니다.</p>
+        <input type="password" id="passwordInput" class="input-box" placeholder="기존 비밀번호를 입력하세요" />
+        <p class="error-text" id="errorText" style="display: none;">비밀번호를 입력해주세요!</p>
+        <button id="checkPasswordBtn">확인</button>
+      </div>
+
+      <div id="edit-section" style="display: none;">
+        <label>이메일 변경</label>
+        <input type="email" class="input-box" placeholder="변경할 이메일 입력" />
+        <button>인증하기</button>
+
+        <label>새 비밀번호</label>
+        <input type="password" class="input-box" placeholder="새 비밀번호 입력" />
+        <label>새 비밀번호 확인</label>
+        <input type="password" class="input-box" placeholder="비밀번호 재입력" />
+
+        <label>전화번호 변경</label>
+        <input type="tel" class="input-box" placeholder="전화번호 입력" />
+        <button>수정 완료</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const checkPasswordBtn = document.getElementById("checkPasswordBtn");
+    const passwordInput = document.getElementById("passwordInput");
+    const errorText = document.getElementById("errorText");
+    const editSection = document.getElementById("edit-section");
+
+    checkPasswordBtn.addEventListener("click", () => {
+      if (passwordInput.value.trim() === "") {
+        errorText.style.display = "block";
+      } else {
+        errorText.style.display = "none";
+        editSection.style.display = "block";
+        passwordInput.disabled = true;
+        checkPasswordBtn.disabled = true;
+      }
+    });
+  </script>
+</body>
+</html>
