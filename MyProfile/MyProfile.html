@@ -3,42 +3,53 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>MyPage</title>
-  <link rel="stylesheet" href="../header/header.css" />
-  <link rel="stylesheet" href="../sidebar/sidebar.css" />
-  <link rel="stylesheet" href="MyProfile.css" />
+  <title>MyProfile</title>
+  <link rel="stylesheet" href="MyPage.css" />
 </head>
 <body>
-  <div id="header-container"></div>
-  <div id="sidebar-container"></div>
-
   <div class="container">
-    <div class="main-content">
-      <h2>마이 프로필</h2>
-      <div class="profile-box">
-        <div class="profile-image"></div>
-        <button class="photo-btn">사진 변경</button>
-        <hr />
-        <label>현재 닉네임</label>
-        <input type="text" class="input-box" placeholder="현재 닉네임" disabled />
-        <label>변경 할 닉네임</label>
-        <input type="text" class="input-box" placeholder="변경할 닉네임 입력" />
-      </div>
-    </div>
+    <aside class="sidebar">
+      <h2>MyPage</h2>
+      <ul class="sidebar-menu">
+        <li class="active"><a href="myprofile.html">마이 프로필</a></li>
+        <li><a href="editprofile.html">회원 정보 수정</a></li>
+        <li><a href="myposts.html">내 게시물 확인</a></li>
+        <li><a href="withdraw.html">회원 탈퇴</a></li>
+      </ul>
+    </aside>
+
+    <main class="main-content">
+      <header class="header">Header</header>
+      <section class="content-box">
+        <h2>마이 프로필</h2>
+        <div class="profile-section">
+          <div class="profile-image" id="profileImage"></div>
+          <input type="file" id="imageUpload" accept="image/*" style="display: none;" />
+          <button class="photo-btn" onclick="document.getElementById('imageUpload').click()">사진 변경</button>
+          <hr />
+          <label>현재 닉네임</label>
+          <input type="text" class="input-box" placeholder="현재 닉네임" disabled />
+          <label>변경 할 닉네임</label>
+          <input type="text" class="input-box" placeholder="변경할 닉네임 입력" />
+        </div>
+      </section>
+    </main>
   </div>
 
   <script>
-    fetch('../header/header.html')
-      .then(res => res.text())
-      .then(data => {
-        document.getElementById('header-container').innerHTML = data;
-      });
+    const imageUpload = document.getElementById("imageUpload");
+    const profileImage = document.getElementById("profileImage");
 
-    fetch('../sidebar/sidebar.html')
-      .then(res => res.text())
-      .then(data => {
-        document.getElementById('sidebar-container').innerHTML = data;
-      });
+    imageUpload.addEventListener("change", function () {
+      const file = this.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          profileImage.style.backgroundImage = `url(${e.target.result})`;
+        };
+        reader.readAsDataURL(file);
+      }
+    });
   </script>
 </body>
 </html>
