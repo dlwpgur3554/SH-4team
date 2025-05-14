@@ -1,0 +1,67 @@
+/* 포트폴리오 공통 스타일 */
+body {
+  background: #f3eee9;
+  color: #222;
+  font-family: 'Noto Sans KR', Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+.portfolio-container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 40px 20px 80px 20px;
+}
+.card-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 32px;
+  justify-content: center;
+}
+.card {
+  background: #726e6b;
+  border-radius: 18px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.10);
+  padding: 32px 28px;
+  width: 320px;
+  min-height: 320px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  transition: box-shadow 0.2s;
+}
+.card:hover {
+  box-shadow: 0 8px 32px rgba(114,110,107,0.18);
+}
+.card-title {
+  font-size: 1.3rem;
+  font-weight: bold;
+  color: #fff;
+  margin-bottom: 10px;
+}
+.card-meta {
+  font-size: 0.95rem;
+  color: #e0e0e0;
+  margin-bottom: 8px;
+}
+.card-desc {
+  font-size: 1rem;
+  color: #fff;
+  margin-bottom: 12px;
+}
+.card-tags {
+  margin-top: auto;
+  display: flex;
+  gap: 8px;
+}
+.card-tag {
+  background: #fff;
+  color: #726e6b;
+  border-radius: 12px;
+  padding: 2px 12px;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+@media (max-width: 900px) {
+  .card-list { flex-direction: column; align-items: center; }
+  .card { width: 95vw; min-width: 0; }
+} 

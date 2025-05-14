@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>로그인</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: #f3eee9;
+            color: #222;
+            font-family: 'Noto Sans KR', Arial, sans-serif;
+            min-height: 100vh;
+        }
+        .header {
+            width: 100%;
+            background: #726e6b;
+            display: flex;
+            align-items: center;
+            padding: 0 40px;
+            height: 70px;
+            box-sizing: border-box;
+            border-bottom: 1.5px solid #bdb8b2;
+        }
+        .header-logo {
+            display: flex;
+            align-items: center;
+        }
+        .header-logo img {
+            max-width: 70px;
+            margin-right: 0;
+        }
+        .container {
+            max-width: 500px;
+            margin: 50px auto;
+            padding: 40px 30px;
+            background: #726e6b;
+            border-radius: 12px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.12);
+        }
+        h2 {
+            text-align: center;
+            color: #fff;
+            font-size: 2rem;
+            margin-bottom: 30px;
+            letter-spacing: 2px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            color: #f3eee9;
+            margin-bottom: 8px;
+            font-weight: 500;
+            font-size: 15px;
+        }
+        input {
+            width: 100%;
+            padding: 12px;
+            background: #f3eee9;
+            border: none;
+            border-radius: 8px;
+            color: #222;
+            font-size: 15px;
+            box-sizing: border-box;
+        }
+        input:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(114, 110, 107, 0.18);
+        }
+        input::placeholder {
+            color: #aaa;
+        }
+        button {
+            width: 100%;
+            padding: 14px;
+            background: #e0b97d;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s;
+            margin-top: 10px;
+        }
+        button:hover {
+            background: #d4a96a;
+            color: #fff;
+        }
+        .error-message {
+            color: #ff6b6b;
+            font-size: 13px;
+            margin-top: 5px;
+            display: none;
+        }
+        .signup-link {
+            text-align: center;
+            margin-top: 25px;
+            font-size: 14px;
+            color: #3a2e13;
+        }
+        .signup-link a {
+            color: #e0b97d;
+            font-weight: bold;
+            text-decoration: none;
+            margin-left: 5px;
+            transition: color 0.2s;
+        }
+        .signup-link a:hover {
+            color: #d4a96a;
+        }
+        .remember-me {
+            display: flex;
+            align-items: center;
+            margin: 15px 0;
+            color: #888;
+            font-size: 14px;
+        }
+        .remember-me input[type="checkbox"] {
+            width: 16px;
+            height: 16px;
+            margin-right: 8px;
+            accent-color: #726e6b;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-logo">
+            <a href="/">
+                <img src="/logo/logo.png" alt="로고">
+            </a>
+        </div>
+    </div>
+    <div class="container">
+        <h2>로그인</h2>
+        <form id="loginForm">
+            <div class="form-group">
+                <label for="username">아이디</label>
+                <input type="text" id="username" name="username" required 
+                       placeholder="아이디를 입력하세요">
+                <div id="usernameError" class="error-message"></div>
+            </div>
+            <div class="form-group">
+                <label for="password">비밀번호</label>
+                <input type="password" id="password" name="password" required 
+                       placeholder="비밀번호를 입력하세요">
+                <div id="passwordError" class="error-message"></div>
+            </div>
+            <div class="remember-me">
+                <input type="checkbox" id="remember" name="remember">
+                <label for="remember">로그인 상태 유지</label>
+            </div>
+            <button type="submit">로그인</button>
+        </form>
+        <div class="signup-link">
+            계정이 없으신가요?<a href="/terms.html">회원가입</a>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            // 에러 메시지 초기화
+            document.getElementById('usernameError').style.display = 'none';
+            document.getElementById('passwordError').style.display = 'none';
+
+            const loginData = {
+                username: document.getElementById('username').value,
+                password: document.getElementById('password').value
+            };
+
+            try {
+                console.log('로그인 시도:', loginData);
+
+                const response = await fetch('/api/members/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(loginData)
+                });
+
+                console.log('서버 응답:', response.status);
+
+                const result = await response.json();
+                console.log('응답 데이터:', result);
+
+                if (result.success) {
+                    // 로그인 성공 시 로그인 상태 저장
+                    if (document.getElementById('remember').checked) {
+                        localStorage.setItem('isLoggedIn', 'true');
+                        localStorage.setItem('username', loginData.username);
+                    } else {
+                        sessionStorage.setItem('isLoggedIn', 'true');
+                        sessionStorage.setItem('username', loginData.username);
+                    }
+                    
+                    alert(result.message);
+                    window.location.href = '/portfolio/list.html';
+                } else {
+                    if (result.message.includes('아이디')) {
+                        document.getElementById('usernameError').textContent = result.message;
+                        document.getElementById('usernameError').style.display = 'block';
+                    } else if (result.message.includes('비밀번호')) {
+                        document.getElementById('passwordError').textContent = result.message;
+                        document.getElementById('passwordError').style.display = 'block';
+                    }
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('로그인 중 오류가 발생했습니다.');
+            }
+        });
+    </script>
+</body>
+</html> 

@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>포트폴리오 리스트</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: #f3eee9;
+            color: #222;
+            font-family: 'Noto Sans KR', Arial, sans-serif;
+        }
+        .main-header {
+            width: 100%;
+            background: #726e6b;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 40px;
+            height: 70px;
+            box-sizing: border-box;
+            border-bottom: 1.5px solid #bdb8b2;
+        }
+        .main-header-logo img {
+            max-width: 70px;
+            vertical-align: middle;
+        }
+        .main-header-auth {
+            display: flex;
+            gap: 18px;
+        }
+        .main-header-auth a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+        .main-header-auth a:hover {
+            color: #f3eee9;
+        }
+        .main-header-auth a.active {
+            color: #f3eee9;
+        }
+        .main-header-auth button {
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            padding: 0;
+            font-family: inherit;
+            transition: color 0.2s;
+        }
+        .main-header-auth button:hover {
+            color: #f3eee9;
+        }
+        .portfolio-container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+        .card-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 24px;
+            justify-content: flex-start;
+        }
+        .card {
+            flex: 1 1 calc((100% - 72px) / 4); /* 4개, gap 24px*3 */
+            max-width: calc((100% - 72px) / 4);
+            min-width: 220px;
+            height: 340px;
+            margin: 0;
+            background: #726e6b;
+            border-radius: 12px;
+            padding: 24px;
+            box-sizing: border-box;
+            transition: transform 0.2s;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            position: relative;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        .card-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #e0b97d;
+            margin-bottom: 10px;
+        }
+        .card-meta {
+            font-size: 0.95rem;
+            color: #fff;
+            margin-bottom: 8px;
+        }
+        .card-desc {
+            font-size: 1rem;
+            color: #fff;
+            margin-bottom: 12px;
+        }
+        .card-tag {
+            display: inline-block;
+            background: #e0b97d;
+            color: #fff;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            margin-right: 8px;
+            margin-bottom: 8px;
+        }
+        .card-detail-link {
+            position: absolute;
+            left: 24px;
+            bottom: 18px;
+            color: #f3eee9;
+            font-size: 15px;
+        }
+        #pagination button, .page-btn {
+            background: none;
+            border: none;
+            color: #726e6b;
+            font-size: 18px;
+            margin: 0 2px;
+            padding: 4px 10px;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: background 0.15s;
+        }
+        #pagination button:disabled, .page-btn:disabled {
+            color: #ccc;
+            cursor: default;
+        }
+        #pagination .current-page {
+            font-weight: bold;
+            text-decoration: underline;
+            color: #e0b97d;
+        }
+    </style>
+</head>
+<body>
+    <div class="main-header">
+        <div class="main-header-logo">
+            <img src="../logo/logo.png" alt="로고">
+        </div>
+        <div class="main-header-auth" id="authButtons">
+            <!-- 로그인 상태에 따라 동적으로 변경됨 -->
+        </div>
+    </div>
+    <div class="portfolio-container">
+        <div class="portfolio-header" style="display:flex; align-items:center; justify-content:center; margin-bottom:32px; position:relative;">
+            <h1 style="color:#e0b97d; font-weight:bold; margin:0; text-align:center; width:100%;">포트폴리오 게시판</h1>
+            <button id="writeBtn"
+                style="position:absolute; right:0; background:#e0b97d; color:#fff; border:none; border-radius:8px; padding:10px 24px; font-weight:bold; font-size:1rem; cursor:pointer; transition:background 0.2s, color 0.2s;"
+                onmouseover="this.style.background='#d4a96a';this.style.color='#fff';" onmouseout="this.style.background='#e0b97d';this.style.color='#fff';">
+                글 작성
+            </button>
+        </div>
+        <div class="card-list" id="portfolio-list"></div>
+        <div id="pagination" style="display:flex; justify-content:center; margin-top:32px; gap:12px;"></div>
+    </div>
+
+    <script>
+        // 로그인 상태 확인 및 버튼 업데이트
+        function updateAuthButtons() {
+            const authButtons = document.getElementById('authButtons');
+            const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true' || sessionStorage.getItem('isLoggedIn') === 'true';
+            
+            if (isLoggedIn) {
+                const username = localStorage.getItem('username') || sessionStorage.getItem('username');
+                authButtons.innerHTML = `
+                    <a href="/mypage/profile.html">마이페이지</a>
+                    <button onclick="handleLogout()">로그아웃</button>
+                `;
+            } else {
+                authButtons.innerHTML = `
+                    <a href="/login.html">로그인</a>
+                    <a href="/terms.html">회원가입</a>
+                `;
+            }
+        }
+
+        // 로그아웃 처리
+        function handleLogout() {
+            localStorage.removeItem('isLoggedIn');
+            localStorage.removeItem('username');
+            sessionStorage.removeItem('isLoggedIn');
+            sessionStorage.removeItem('username');
+            updateAuthButtons();
+            window.location.reload();
+        }
+
+        // 페이지 로드 시 로그인 상태 확인
+        updateAuthButtons();
+
+        let allPosts = [];
+        let currentPage = 1;
+        const cardsPerPage = 8;
+
+        function renderPage(page) {
+            const list = document.getElementById('portfolio-list');
+            list.innerHTML = '';
+            const start = (page - 1) * cardsPerPage;
+            const end = start + cardsPerPage;
+            const posts = allPosts.slice(start, end);
+            posts.forEach((post, idx) => {
+                const p = JSON.parse(post.content);
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.style.cursor = 'pointer';
+                card.innerHTML = `
+                    ${p.photo ? `<img src='${p.photo}' alt='대표사진' style='width:60px; height:60px; border-radius:50%; object-fit:cover; margin-bottom:10px;' />` : ''}
+                    <div class='card-title'>${p.name} 포트폴리오</div>
+                    <div class='card-desc'>${p.hope}</div>
+                    <div class='card-tags'>${(p.stack||'').split(' ').map(t=>t?`<span class='card-tag'>${t}</span>`:'').join('')}</div>
+                    <div class='card-detail-link'>자세히 보기 →</div>
+                `;
+                card.onclick = () => location.href = `detail.html?id=${post.id}`;
+                list.appendChild(card);
+            });
+        }
+
+        function renderPagination() {
+            const pagination = document.getElementById('pagination');
+            pagination.innerHTML = '';
+            const totalPages = Math.ceil(allPosts.length / cardsPerPage);
+            if (totalPages <= 1) return;
+
+            const maxPageBtns = 5;
+            let startPage = Math.max(1, currentPage - Math.floor(maxPageBtns / 2));
+            let endPage = startPage + maxPageBtns - 1;
+            if (endPage > totalPages) {
+                endPage = totalPages;
+                startPage = Math.max(1, endPage - maxPageBtns + 1);
+            }
+
+            // 맨 앞으로
+            const firstBtn = document.createElement('button');
+            firstBtn.innerHTML = '&laquo;';
+            firstBtn.disabled = currentPage === 1;
+            firstBtn.onclick = () => { currentPage = 1; renderPage(currentPage); renderPagination(); };
+            pagination.appendChild(firstBtn);
+
+            // 이전
+            const prevBtn = document.createElement('button');
+            prevBtn.innerHTML = '&lsaquo;';
+            prevBtn.disabled = currentPage === 1;
+            prevBtn.onclick = () => { currentPage--; renderPage(currentPage); renderPagination(); };
+            pagination.appendChild(prevBtn);
+
+            for (let i = startPage; i <= endPage; i++) {
+                const pageBtn = document.createElement('button');
+                pageBtn.textContent = i;
+                pageBtn.className = 'page-btn';
+                if (i === currentPage) pageBtn.classList.add('current-page');
+                pageBtn.onclick = () => { currentPage = i; renderPage(currentPage); renderPagination(); };
+                pagination.appendChild(pageBtn);
+            }
+
+            // 다음
+            const nextBtn = document.createElement('button');
+            nextBtn.innerHTML = '&rsaquo;';
+            nextBtn.disabled = currentPage === totalPages;
+            nextBtn.onclick = () => { currentPage++; renderPage(currentPage); renderPagination(); };
+            pagination.appendChild(nextBtn);
+
+            // 맨 뒤로
+            const lastBtn = document.createElement('button');
+            lastBtn.innerHTML = '&raquo;';
+            lastBtn.disabled = currentPage === totalPages;
+            lastBtn.onclick = () => { currentPage = totalPages; renderPage(currentPage); renderPagination(); };
+            pagination.appendChild(lastBtn);
+        }
+
+        fetch('/api/posts', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(res => {
+            if (!res.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return res.json();
+        })
+        .then(posts => {
+            allPosts = posts;
+            renderPage(currentPage);
+            renderPagination();
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('포트폴리오 목록을 불러오는데 실패했습니다.');
+        });
+
+        document.getElementById('writeBtn').onclick = function() {
+            const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true' || sessionStorage.getItem('isLoggedIn') === 'true';
+            if (!isLoggedIn) {
+                alert('글 작성은 로그인 후 이용 가능합니다.');
+                window.location.href = '/login.html';
+                return;
+            }
+            window.location.href = 'write.html';
+        };
+    </script>
+</body>
+</html>

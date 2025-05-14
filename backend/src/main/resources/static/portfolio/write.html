@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>포트폴리오 작성</title>
+  <link rel="stylesheet" href="portfolio.css" />
+  <link rel="stylesheet" href="../header/header.css" />
+  <style>
+    .write-form {
+      max-width: 600px;
+      margin: 40px auto;
+      background: #726e6b;
+      border-radius: 18px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.10);
+      padding: 36px 32px;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+    .write-form label {
+      font-weight: bold;
+      color: #e0b97d;
+      margin-bottom: 4px;
+    }
+    .write-form input, .write-form textarea {
+      width: 100%;
+      padding: 10px;
+      border-radius: 8px;
+      border: none;
+      background: #f3eee9;
+      color: #222;
+      font-size: 1rem;
+      margin-bottom: 10px;
+      box-sizing: border-box;
+    }
+    .write-form input[type="file"] {
+      background: #f3eee9;
+      color: #222;
+      border: none;
+      margin-bottom: 10px;
+    }
+    .write-form .tag-input {
+      margin-bottom: 10px;
+    }
+    .write-btn, #add-lang-btn, #add-cert-btn, #add-project-btn {
+      background: #e0b97d;
+      color: #fff;
+      border: none;
+      border-radius: 24px;
+      padding: 14px 0;
+      font-size: 1.1rem;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 10px;
+      transition: background 0.2s, color 0.2s;
+    }
+    .write-btn:hover, #add-lang-btn:hover, #add-cert-btn:hover, #add-project-btn:hover {
+      background: #d4a96a;
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+  <div id="header-container"></div>
+  <div class="portfolio-container">
+    <div class="portfolio-header">
+      <h1 id="page-title" style="color:#e0b97d; margin:0; text-align:center; width:100%;"></h1>
+    </div>
+    <form class="write-form" id="portfolio-form" autocomplete="off">
+      <label>대표사진(증명사진)</label>
+      <input type="file" accept="image/*" />
+      <label>이름</label>
+      <input type="text" placeholder="이름" required />
+      <label>나이</label>
+      <input type="number" placeholder="나이" required />
+      <label>학력</label>
+      <input type="text" placeholder="최종 학력" required />
+      <label>경력</label>
+      <textarea rows="2" placeholder="경력(회사명, 기간, 직무 등)" required></textarea>
+      <label>기술스택</label>
+      <input type="text" class="tag-input" placeholder="#HTML #CSS #JavaScript #React" required />
+      <label>자기소개서</label>
+      <textarea rows="4" placeholder="자기소개서" required></textarea>
+      <label>연락처</label>
+      <input type="text" placeholder="이메일 또는 연락처" required />
+      <label>희망 분야</label>
+      <input type="text" placeholder="희망 분야 (예: 웹개발/백엔드 분야)" />
+      <label>깃 주소</label>
+      <input type="text" placeholder="깃허브 주소 (예: https://github.com/username)" />
+
+      <div id="langs-area">
+        <label style="margin-top:18px;">어학점수</label>
+        <div class="lang-item">
+          <input type="text" placeholder="시험명 (예: 토익)" required style="width:40%; display:inline-block; margin-right:8px;" />
+          <input type="text" placeholder="점수/등급 (예: 900, IH)" required style="width:40%; display:inline-block;" />
+          <button type="button" class="remove-lang-btn" style="display:none; margin-bottom:10px;">삭제</button>
+        </div>
+      </div>
+      <button type="button" id="add-lang-btn" style="margin-bottom:10px;">+ 어학점수 추가</button>
+
+      <div id="certs-area">
+        <label style="margin-top:18px;">보유 자격증</label>
+        <div class="cert-item">
+          <input type="text" placeholder="자격증명" required style="width:30%; display:inline-block; margin-right:8px;" />
+          <input type="text" placeholder="발급기관" required style="width:30%; display:inline-block; margin-right:8px;" />
+          <input type="text" placeholder="취득일 (예: 2024-01)" required style="width:25%; display:inline-block;" />
+          <button type="button" class="remove-cert-btn" style="display:none; margin-bottom:10px;">삭제</button>
+        </div>
+      </div>
+      <button type="button" id="add-cert-btn" style="margin-bottom:10px;">+ 자격증 추가</button>
+
+      <div id="projects-area">
+        <label style="margin-top:18px;">포트폴리오(프로젝트) 목록</label>
+        <div class="project-item">
+          <input type="file" accept="image/*" style="margin-bottom:8px;" />
+          <input type="text" placeholder="포트폴리오 제목" required />
+          <textarea rows="3" placeholder="포트폴리오 상세 설명" required></textarea>
+          <button type="button" class="remove-project-btn" style="display:none; margin-bottom:10px;">삭제</button>
+        </div>
+      </div>
+      <button type="button" id="add-project-btn" style="margin-bottom:10px;">+ 포트폴리오 추가</button>
+      <button type="submit" class="write-btn">저장</button>
+    </form>
+  </div>
+  <script>
+    fetch('../header/header.html')
+      .then(res => res.text())
+      .then(data => {
+        const headerContainer = document.getElementById('header-container');
+        headerContainer.innerHTML = data;
+        
+        // 로고 클릭 이벤트 추가
+        const logo = headerContainer.querySelector('.logo');
+        if (logo) {
+          logo.onclick = () => {
+            window.location.href = '../index.html';
+          };
+        }
+
+        // 로그인/회원가입 버튼 제거
+        const loginBtn = headerContainer.querySelector('.login-btn');
+        const signupBtn = headerContainer.querySelector('.signup-btn');
+        if (loginBtn) loginBtn.remove();
+        if (signupBtn) signupBtn.remove();
+
+        // 헤더 스타일 수정
+        const header = headerContainer.querySelector('header');
+        if (header) {
+          header.style.justifyContent = 'center';
+        }
+      });
+    // 동적 포트폴리오(프로젝트) 추가/삭제
+    const projectsArea = document.getElementById('projects-area');
+    document.getElementById('add-project-btn').onclick = function() {
+      const div = document.createElement('div');
+      div.className = 'project-item';
+      div.innerHTML = `
+        <input type=\"file\" accept=\"image/*\" style=\"margin-bottom:8px;\" />
+        <input type=\"text\" placeholder=\"포트폴리오 제목\" required />
+        <textarea rows=\"3\" placeholder=\"포트폴리오 상세 설명\" required></textarea>
+        <button type=\"button\" class=\"remove-project-btn\" style=\"margin-bottom:10px;\">삭제</button>
+      `;
+      div.querySelector('.remove-project-btn').onclick = function() {
+        div.remove();
+      };
+      projectsArea.appendChild(div);
+      updateRemoveBtns();
+    };
+    function updateRemoveBtns() {
+      const btns = projectsArea.querySelectorAll('.remove-project-btn');
+      btns.forEach((btn, idx) => {
+        btn.style.display = (projectsArea.querySelectorAll('.project-item').length > 1) ? '' : 'none';
+        btn.onclick = function() {
+          btn.parentElement.remove();
+          updateRemoveBtns();
+        };
+      });
+      // 어학점수 삭제 버튼
+      const langBtns = langsArea.querySelectorAll('.remove-lang-btn');
+      langBtns.forEach((btn, idx) => {
+        btn.style.display = (langsArea.querySelectorAll('.lang-item').length > 1) ? '' : 'none';
+        btn.onclick = function() {
+          btn.parentElement.remove();
+          updateRemoveBtns();
+        };
+      });
+      // 자격증 삭제 버튼
+      const certBtns = certsArea.querySelectorAll('.remove-cert-btn');
+      certBtns.forEach((btn, idx) => {
+        btn.style.display = (certsArea.querySelectorAll('.cert-item').length > 1) ? '' : 'none';
+        btn.onclick = function() {
+          btn.parentElement.remove();
+          updateRemoveBtns();
+        };
+      });
+    }
+    // 어학점수 동적 추가
+    const langsArea = document.getElementById('langs-area');
+    document.getElementById('add-lang-btn').onclick = function() {
+      const div = document.createElement('div');
+      div.className = 'lang-item';
+      div.innerHTML = `
+        <input type="text" placeholder="시험명 (예: 토익)" required style="width:40%; display:inline-block; margin-right:8px;" />
+        <input type="text" placeholder="점수/등급 (예: 900, IH)" required style="width:40%; display:inline-block;" />
+        <button type="button" class="remove-lang-btn" style="margin-bottom:10px;">삭제</button>
+      `;
+      langsArea.appendChild(div);
+      updateRemoveBtns();
+    };
+    // 자격증 동적 추가
+    const certsArea = document.getElementById('certs-area');
+    document.getElementById('add-cert-btn').onclick = function() {
+      const div = document.createElement('div');
+      div.className = 'cert-item';
+      div.innerHTML = `
+        <input type="text" placeholder="자격증명" required style="width:30%; display:inline-block; margin-right:8px;" />
+        <input type="text" placeholder="발급기관" required style="width:30%; display:inline-block; margin-right:8px;" />
+        <input type="text" placeholder="취득일 (예: 2024-01)" required style="width:25%; display:inline-block;" />
+        <button type="button" class="remove-cert-btn" style="margin-bottom:10px;">삭제</button>
+      `;
+      certsArea.appendChild(div);
+      updateRemoveBtns();
+    };
+    updateRemoveBtns();
+    // 저장 기능
+    function getParam(name) {
+      const url = new URL(window.location.href);
+      return url.searchParams.get(name);
+    }
+    const editId = getParam('id');
+    if(editId !== null) {
+      // 수정 모드: 서버에서 데이터 불러오기
+      fetch(`http://localhost:8080/api/posts/${editId}`)
+        .then(res => res.json())
+        .then(post => {
+          const data = JSON.parse(post.content);
+          
+          // 대표사진 미리보기
+          if(data.photo) {
+            const img = document.createElement('img');
+            img.src = data.photo;
+            img.style = 'width:60px;height:60px;border-radius:50%;object-fit:cover;margin-bottom:8px;';
+            document.querySelector('input[type="file"]').insertAdjacentElement('beforebegin', img);
+          }
+          
+          // 기본 정보 채우기
+          document.querySelector('input[placeholder="이름"]').value = data.name || '';
+          document.querySelector('input[placeholder="나이"]').value = data.age || '';
+          document.querySelector('input[placeholder="최종 학력"]').value = data.edu || '';
+          document.querySelector('textarea[placeholder^="경력"]').value = data.career || '';
+          document.querySelector('input[placeholder^="#HTML"]').value = data.stack || '';
+          document.querySelector('textarea[placeholder="자기소개서"]').value = data.selfIntro || '';
+          document.querySelector('input[placeholder="이메일 또는 연락처"]').value = data.contact || '';
+          document.querySelector('input[placeholder="희망 분야 (예: 웹개발/백엔드 분야)"]').value = data.hope || '';
+          document.querySelector('input[placeholder^="깃허브 주소"]').value = data.github || '';
+
+          // 어학점수 채우기
+          const langsArea = document.getElementById('langs-area');
+          langsArea.querySelectorAll('.lang-item').forEach((el, i) => {
+            if(i > 0) el.remove();
+          });
+          (data.langs || []).forEach((lang, i) => {
+            if(i > 0) document.getElementById('add-lang-btn').click();
+            const items = langsArea.querySelectorAll('.lang-item');
+            items[i].querySelector('input[placeholder*="시험명"]').value = lang.test || '';
+            items[i].querySelector('input[placeholder*="점수"]').value = lang.score || '';
+          });
+
+          // 자격증 채우기
+          const certsArea = document.getElementById('certs-area');
+          certsArea.querySelectorAll('.cert-item').forEach((el, i) => {
+            if(i > 0) el.remove();
+          });
+          (data.certs || []).forEach((cert, i) => {
+            if(i > 0) document.getElementById('add-cert-btn').click();
+            const items = certsArea.querySelectorAll('.cert-item');
+            items[i].querySelector('input[placeholder="자격증명"]').value = cert.name || '';
+            items[i].querySelector('input[placeholder="발급기관"]').value = cert.org || '';
+            items[i].querySelector('input[placeholder="취득일 (예: 2024-01)"]').value = cert.date || '';
+          });
+
+          // 프로젝트 채우기
+          const projectsArea = document.getElementById('projects-area');
+          projectsArea.querySelectorAll('.project-item').forEach((el, i) => {
+            if(i > 0) el.remove();
+          });
+          (data.projects || []).forEach((project, i) => {
+            if(i > 0) document.getElementById('add-project-btn').click();
+            const items = projectsArea.querySelectorAll('.project-item');
+            if(project.img) {
+              const img = document.createElement('img');
+              img.src = project.img;
+              img.style = 'width:100%;margin-bottom:8px;border-radius:8px;';
+              items[i].querySelector('input[type="file"]').insertAdjacentElement('beforebegin', img);
+            }
+            items[i].querySelector('input[placeholder="포트폴리오 제목"]').value = project.title || '';
+            items[i].querySelector('textarea').value = project.desc || '';
+          });
+
+          // 수정 모드 표시
+          document.getElementById('page-title').textContent = '포트폴리오 수정';
+        });
+    } else {
+      document.getElementById('page-title').textContent = '포트폴리오 작성';
+    }
+    // Base64 변환 함수
+    function toBase64(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+      });
+    }
+
+    // 이미지 압축 함수
+    function compressImage(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = function(e) {
+          const img = new Image();
+          img.src = e.target.result;
+          img.onload = function() {
+            const canvas = document.createElement('canvas');
+            let width = img.width;
+            let height = img.height;
+            
+            // 이미지 크기 조정 (최대 800px)
+            const MAX_SIZE = 800;
+            if (width > height && width > MAX_SIZE) {
+              height = Math.round((height * MAX_SIZE) / width);
+              width = MAX_SIZE;
+            } else if (height > MAX_SIZE) {
+              width = Math.round((width * MAX_SIZE) / height);
+              height = MAX_SIZE;
+            }
+            
+            canvas.width = width;
+            canvas.height = height;
+            
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, width, height);
+            
+            // 품질 조정 (0.7 = 70% 품질)
+            resolve(canvas.toDataURL('image/jpeg', 0.7));
+          };
+          img.onerror = reject;
+        };
+        reader.onerror = reject;
+      });
+    }
+
+    document.getElementById('portfolio-form').onsubmit = async function(e) {
+      e.preventDefault();
+      const form = e.target;
+      
+      // 대표사진 처리
+      let photo = '';
+      const photoInput = form.querySelector('input[type="file"]');
+      if(photoInput.files[0]) {
+        photo = await compressImage(photoInput.files[0]);
+      } else if(editId !== null) {
+        // 수정 시 기존 이미지 유지
+        const existingImg = form.querySelector('input[type="file"]').previousElementSibling;
+        if(existingImg && existingImg.tagName === 'IMG') {
+          photo = existingImg.src;
+        }
+      }
+
+      // 프로젝트 이미지 처리
+      const projects = await Promise.all(Array.from(document.querySelectorAll('.project-item')).map(async (div, i) => {
+        let img = '';
+        const imgInput = div.querySelector('input[type="file"]');
+        if(imgInput && imgInput.files[0]) {
+          img = await compressImage(imgInput.files[0]);
+        } else if(editId !== null) {
+          // 수정 시 기존 이미지 유지
+          const existingImg = div.querySelector('img');
+          if(existingImg) {
+            img = existingImg.src;
+          }
+        }
+        return {
+          title: div.querySelector('input[placeholder="포트폴리오 제목"]').value,
+          desc: div.querySelector('textarea').value,
+          img
+        };
+      }));
+
+      // 기본 정보
+      const name = form.querySelector('input[placeholder="이름"]').value;
+      const age = form.querySelector('input[placeholder="나이"]').value;
+      const edu = form.querySelector('input[placeholder="최종 학력"]').value;
+      const career = form.querySelector('textarea[placeholder^="경력"]').value;
+      const stack = form.querySelector('input[placeholder^="#HTML"]').value;
+      
+      // 어학점수
+      const langs = Array.from(document.querySelectorAll('.lang-item')).map(div => ({
+        test: div.querySelector('input[placeholder*="시험명"]').value,
+        score: div.querySelector('input[placeholder*="점수"]').value
+      }));
+      
+      // 자격증
+      const certs = Array.from(document.querySelectorAll('.cert-item')).map(div => ({
+        name: div.querySelector('input[placeholder="자격증명"]').value,
+        org: div.querySelector('input[placeholder="발급기관"]').value,
+        date: div.querySelector('input[placeholder="취득일 (예: 2024-01)"]').value
+      }));
+
+      // 자기소개서
+      const selfIntro = form.querySelector('textarea[placeholder="자기소개서"]').value;
+      
+      // 연락처
+      const contact = form.querySelector('input[placeholder="이메일 또는 연락처"]').value;
+
+      // 희망 분야
+      const hope = form.querySelector('input[placeholder^="희망 분야"]').value;
+      const github = form.querySelector('input[placeholder^="깃허브 주소"]').value;
+
+      // 전체 데이터 구성
+      const data = {
+        photo,
+        name,
+        age,
+        edu,
+        career,
+        stack,
+        langs,
+        certs,
+        projects,
+        selfIntro,
+        contact,
+        hope,
+        github
+      };
+
+      // author에 로그인 아이디 저장
+      const currentUser = localStorage.getItem('username') || sessionStorage.getItem('username');
+
+      try {
+        const url = editId !== null 
+          ? `http://localhost:8080/api/posts/${editId}`
+          : 'http://localhost:8080/api/posts';
+        
+        const method = editId !== null ? 'PUT' : 'POST';
+        
+        const response = await fetch(url, {
+          method: method,
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({
+            title: name + ' 포트폴리오',
+            content: JSON.stringify(data),
+            author: currentUser
+          })
+        });
+
+        if (!response.ok) throw new Error('저장 실패');
+        
+        alert(editId !== null ? '수정되었습니다!' : '저장되었습니다!');
+        window.location.href = 'list.html';
+      } catch (err) {
+        alert('저장 실패: ' + err);
+      }
+    };
+  </script>
+</body>
+</html> 

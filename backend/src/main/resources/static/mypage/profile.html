@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>마이페이지</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: #f3eee9;
+            color: #222;
+            font-family: 'Noto Sans KR', Arial, sans-serif;
+        }
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+            padding: 40px 32px;
+        }
+        h2 {
+            color: #726e6b;
+            margin-bottom: 24px;
+        }
+        .section {
+            margin-bottom: 40px;
+        }
+        .profile-info label {
+            display: block;
+            margin-bottom: 6px;
+            color: #726e6b;
+            font-weight: bold;
+        }
+        .profile-info input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 16px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            font-size: 15px;
+        }
+        .profile-info button {
+            background: #e0b97d;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            padding: 10px 24px;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 8px;
+        }
+        .profile-info button:hover {
+            background: #d4a96a;
+        }
+        .portfolio-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 18px;
+        }
+        .portfolio-card {
+            background: #726e6b;
+            color: #fff;
+            border-radius: 10px;
+            padding: 18px 16px;
+            width: 220px;
+            min-height: 120px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .portfolio-card .title {
+            font-weight: bold;
+            color: #e0b97d;
+            margin-bottom: 8px;
+        }
+        .portfolio-card .actions {
+            margin-top: 10px;
+            display: flex;
+            gap: 8px;
+        }
+        .portfolio-card button {
+            background: #e0b97d;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 4px 10px;
+            font-size: 13px;
+            cursor: pointer;
+        }
+        .portfolio-card button:hover {
+            background: #d4a96a;
+        }
+        .delete-btn {
+            background: #ff6b6b;
+        }
+        .delete-btn:hover {
+            background: #d9534f;
+        }
+        .withdraw-btn {
+            background: #ff6b6b;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            padding: 10px 24px;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .withdraw-btn:hover {
+            background: #d9534f;
+        }
+    </style>
+</head>
+<body>
+    <!-- 비밀번호 인증 모달 -->
+    <div id="pwAuthModal" style="display:flex; position:fixed; left:0; top:0; width:100vw; height:100vh; background:rgba(0,0,0,0.3); z-index:2000; align-items:center; justify-content:center;">
+        <div style="background:#fff; border-radius:10px; padding:32px 28px; min-width:320px; box-shadow:0 4px 24px rgba(0,0,0,0.15); position:relative;">
+            <h3 style="margin-top:0; color:#726e6b;">비밀번호 확인</h3>
+            <input type="password" id="authPw" placeholder="비밀번호 입력" style="width:100%; padding:10px; border-radius:6px; border:1px solid #ccc; margin-bottom:12px;">
+            <div id="authPwError" style="color:#b33; font-size:14px; margin-bottom:10px; display:none;"></div>
+            <button id="authPwBtn" style="background:#e0b97d; color:#fff; border:none; border-radius:6px; padding:8px 20px; font-size:15px; font-weight:bold; cursor:pointer;">확인</button>
+        </div>
+    </div>
+    <div class="container" id="mypageContent" style="display:none;">
+        <h2>마이페이지</h2>
+        <div class="section" style="margin-bottom:24px;">
+            <button id="changePwBtn" style="background:#e0b97d; color:#fff; border:none; border-radius:6px; padding:10px 24px; font-size:15px; font-weight:bold; cursor:pointer;">비밀번호 변경</button>
+        </div>
+        <!-- 비밀번호 변경 모달 -->
+        <div id="pwModal" style="display:none; position:fixed; left:0; top:0; width:100vw; height:100vh; background:rgba(0,0,0,0.3); z-index:1000; align-items:center; justify-content:center;">
+            <div style="background:#fff; border-radius:10px; padding:32px 28px; min-width:320px; box-shadow:0 4px 24px rgba(0,0,0,0.15); position:relative;">
+                <h3 style="margin-top:0; color:#726e6b;">비밀번호 변경</h3>
+                <input type="password" id="newPw" placeholder="새 비밀번호" style="width:100%; padding:10px; border-radius:6px; border:1px solid #ccc; margin-bottom:12px;">
+                <input type="password" id="newPwCheck" placeholder="새 비밀번호 확인" style="width:100%; padding:10px; border-radius:6px; border:1px solid #ccc; margin-bottom:12px;">
+                <div id="pwError" style="color:#b33; font-size:14px; margin-bottom:10px; display:none;"></div>
+                <button id="pwChangeSubmit" style="background:#e0b97d; color:#fff; border:none; border-radius:6px; padding:8px 20px; font-size:15px; font-weight:bold; cursor:pointer;">변경</button>
+                <button id="pwModalClose" style="background:#ccc; color:#333; border:none; border-radius:6px; padding:8px 20px; font-size:15px; font-weight:bold; cursor:pointer; margin-left:8px;">취소</button>
+            </div>
+        </div>
+        <div class="section">
+            <h3>내가 쓴 포트폴리오</h3>
+            <div class="portfolio-list" id="myPortfolioList"></div>
+        </div>
+        <div class="section">
+            <h3>회원 탈퇴</h3>
+            <div style="margin-bottom:10px; color:#b33; font-size:15px;">
+                회원 탈퇴 시 모든 정보와 작성한 포트폴리오가 영구 삭제됩니다.<br>
+                정말로 탈퇴하시려면 비밀번호를 입력하세요.
+            </div>
+            <input type="password" id="withdrawPassword" placeholder="비밀번호 입력" style="width:220px; padding:8px; border-radius:6px; border:1px solid #ccc; margin-bottom:10px;">
+            <button class="withdraw-btn" id="withdrawBtn">회원 탈퇴</button>
+        </div>
+    </div>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // 마이페이지 진입 시 비밀번호 인증
+        const pwAuthModal = document.getElementById('pwAuthModal');
+        const mypageContent = document.getElementById('mypageContent');
+        document.getElementById('authPwBtn').onclick = async function() {
+            const password = document.getElementById('authPw').value;
+            const username = localStorage.getItem('username') || sessionStorage.getItem('username');
+            if (!password) {
+                document.getElementById('authPwError').textContent = '비밀번호를 입력하세요.';
+                document.getElementById('authPwError').style.display = 'block';
+                return;
+            }
+            // 로그인 API로 인증
+            const res = await fetch('/api/members/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username, password })
+            });
+            if (res.ok) {
+                pwAuthModal.style.display = 'none';
+                mypageContent.style.display = '';
+            } else {
+                document.getElementById('authPwError').textContent = '비밀번호가 일치하지 않습니다.';
+                document.getElementById('authPwError').style.display = 'block';
+            }
+        };
+
+        // 비밀번호 변경 모달
+        document.getElementById('changePwBtn').onclick = function() {
+            document.getElementById('pwModal').style.display = 'flex';
+        };
+        document.getElementById('pwModalClose').onclick = function() {
+            document.getElementById('pwModal').style.display = 'none';
+            document.getElementById('newPw').value = '';
+            document.getElementById('newPwCheck').value = '';
+            document.getElementById('pwError').style.display = 'none';
+        };
+        document.getElementById('pwChangeSubmit').onclick = async function() {
+            const newPw = document.getElementById('newPw').value;
+            const newPwCheck = document.getElementById('newPwCheck').value;
+            const errorDiv = document.getElementById('pwError');
+            if (!newPw || !newPwCheck) {
+                errorDiv.textContent = '비밀번호를 모두 입력하세요.';
+                errorDiv.style.display = 'block';
+                return;
+            }
+            if (newPw !== newPwCheck) {
+                errorDiv.textContent = '비밀번호가 일치하지 않습니다.';
+                errorDiv.style.display = 'block';
+                return;
+            }
+            const username = localStorage.getItem('username') || sessionStorage.getItem('username');
+            const res = await fetch('/api/members/update', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username, password: newPw })
+            });
+            if (res.ok) {
+                alert('비밀번호가 변경되었습니다.');
+                document.getElementById('pwModal').style.display = 'none';
+                document.getElementById('newPw').value = '';
+                document.getElementById('newPwCheck').value = '';
+                errorDiv.style.display = 'none';
+            } else {
+                errorDiv.textContent = '비밀번호 변경에 실패했습니다.';
+                errorDiv.style.display = 'block';
+            }
+        };
+
+        // 내가 쓴 포트폴리오 불러오기
+        async function loadMyPortfolios() {
+            const username = localStorage.getItem('username') || sessionStorage.getItem('username');
+            const res = await fetch('/api/posts');
+            if (res.ok) {
+                const posts = await res.json();
+                const myPosts = posts.filter(post => post.author === username);
+                const list = document.getElementById('myPortfolioList');
+                list.innerHTML = '';
+                myPosts.forEach(post => {
+                    const p = JSON.parse(post.content);
+                    const card = document.createElement('div');
+                    card.className = 'portfolio-card';
+                    card.innerHTML = `
+                        <div class='title'>${p.name} 포트폴리오</div>
+                        <div>${p.hope}</div>
+                        <div class='actions'>
+                            <button onclick="location.href='/portfolio/write.html?id=${post.id}'">수정</button>
+                            <button class='delete-btn' onclick="deletePortfolio(${post.id})">삭제</button>
+                        </div>
+                    `;
+                    list.appendChild(card);
+                });
+            }
+        }
+        loadMyPortfolios();
+
+        // 포트폴리오 삭제
+        window.deletePortfolio = async function(id) {
+            if (!confirm('정말로 삭제하시겠습니까?')) return;
+            const res = await fetch(`/api/posts/${id}`, { method: 'DELETE' });
+            if (res.ok) {
+                alert('삭제되었습니다.');
+                loadMyPortfolios();
+            } else {
+                alert('삭제에 실패했습니다.');
+            }
+        }
+
+        // 회원 탈퇴
+        document.getElementById('withdrawBtn').onclick = async function() {
+            const password = document.getElementById('withdrawPassword').value;
+            if (!password) {
+                alert('비밀번호를 입력하세요.');
+                return;
+            }
+            if (!confirm('정말로 회원 탈퇴하시겠습니까? 모든 정보가 삭제됩니다.')) return;
+            const username = localStorage.getItem('username') || sessionStorage.getItem('username');
+            const res = await fetch('/api/members/delete', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username, password })
+            });
+            if (res.ok) {
+                alert('회원 탈퇴가 완료되었습니다.');
+                localStorage.clear();
+                sessionStorage.clear();
+                window.location.href = '/login.html';
+            } else {
+                const result = await res.json();
+                alert(result.message || '회원 탈퇴에 실패했습니다.');
+            }
+        };
+    });
+    </script>
+</body>
+</html> 

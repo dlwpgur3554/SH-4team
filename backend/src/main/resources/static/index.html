@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>포트폴리오 관리</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: #f3eee9;
+            color: #222;
+            font-family: 'Noto Sans KR', Arial, sans-serif;
+        }
+        .main-header {
+            width: 100%;
+            background: #726e6b;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 40px;
+            height: 70px;
+            box-sizing: border-box;
+            border-bottom: 1.5px solid #bdb8b2;
+        }
+        .main-header-logo img {
+            max-width: 70px;
+            vertical-align: middle;
+        }
+        .main-header-auth {
+            display: flex;
+            gap: 18px;
+        }
+        .main-header-auth a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+        .main-header-auth a:hover {
+            color: #f3eee9;
+        }
+        .main-header-auth a.active {
+            color: #f3eee9;
+        }
+        .main-header-auth button {
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            padding: 0;
+            font-family: inherit;
+            transition: color 0.2s;
+        }
+        .main-header-auth button:hover {
+            color: #f3eee9;
+        }
+        .main-content {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+        .welcome-section {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+        .welcome-section h1 {
+            font-size: 2.5rem;
+            color: #726e6b;
+            margin-bottom: 20px;
+        }
+        .welcome-section p {
+            font-size: 1.1rem;
+            color: #666;
+            line-height: 1.6;
+        }
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+        .feature-card {
+            background: #fff;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: transform 0.2s;
+        }
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+        .feature-card h3 {
+            color: #726e6b;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+        .feature-card p {
+            color: #666;
+            line-height: 1.5;
+        }
+        .cta-button {
+            display: inline-block;
+            background: #e0b97d;
+            color: #fff;
+            padding: 12px 30px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: bold;
+            margin-top: 20px;
+            transition: background 0.2s;
+        }
+        .cta-button:hover {
+            background: #d4a96a;
+        }
+    </style>
+</head>
+<body>
+    <div class="main-header">
+        <div class="main-header-logo">
+            <img src="/logo/logo.png" alt="로고">
+        </div>
+        <div class="main-header-auth" id="authButtons">
+            <!-- 로그인 상태에 따라 동적으로 변경됨 -->
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="welcome-section">
+            <h1>포트폴리오 관리 시스템</h1>
+            <p>당신의 포트폴리오를 효과적으로 관리하고 공유하세요.</p>
+            <a href="/portfolio/list.html" class="cta-button">포트폴리오 보기</a>
+        </div>
+
+        <div class="feature-grid">
+            <div class="feature-card">
+                <h3>포트폴리오 작성</h3>
+                <p>쉽고 빠르게 포트폴리오를 작성하고 관리할 수 있습니다.</p>
+            </div>
+            <div class="feature-card">
+                <h3>프로젝트 관리</h3>
+                <p>프로젝트를 체계적으로 관리하고 성과를 기록하세요.</p>
+            </div>
+            <div class="feature-card">
+                <h3>자격증 관리</h3>
+                <p>보유한 자격증과 어학 점수를 한눈에 관리하세요.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 로그인 상태 확인 및 버튼 업데이트
+        function updateAuthButtons() {
+            const authButtons = document.getElementById('authButtons');
+            const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true' || sessionStorage.getItem('isLoggedIn') === 'true';
+            
+            if (isLoggedIn) {
+                const username = localStorage.getItem('username') || sessionStorage.getItem('username');
+                authButtons.innerHTML = `
+                    <a href="/MyPage/myprofile/myprofile.html">마이페이지</a>
+                    <button onclick="handleLogout()">로그아웃</button>
+                `;
+            } else {
+                authButtons.innerHTML = `
+                    <a href="/login.html">로그인</a>
+                    <a href="/terms.html">회원가입</a>
+                `;
+            }
+        }
+
+        // 로그아웃 처리
+        function handleLogout() {
+            localStorage.removeItem('isLoggedIn');
+            localStorage.removeItem('username');
+            sessionStorage.removeItem('isLoggedIn');
+            sessionStorage.removeItem('username');
+            updateAuthButtons();
+            window.location.reload();
+        }
+
+        // 페이지 로드 시 로그인 상태 확인
+        updateAuthButtons();
+    </script>
+</body>
+</html> 

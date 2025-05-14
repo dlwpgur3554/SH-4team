@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>포트폴리오 상세</title>
+  <link rel="stylesheet" href="portfolio.css" />
+  <link rel="stylesheet" href="../header/header.css" />
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Noto Sans KR', Arial, sans-serif;
+      background-color: #f3eee9;
+      color: #222;
+    }
+
+    .portfolio-container {
+      max-width: 1000px;
+      margin: 40px auto;
+      padding: 0 20px;
+    }
+
+    .portfolio-header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 32px;
+      position: relative;
+    }
+
+    .section, .project-section, .cert-section, .lang-section {
+      background: #726e6b;
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 24px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+    }
+
+    .section-title {
+      color: #e0b97d;
+      font-size: 1.2rem;
+      font-weight: bold;
+      margin-bottom: 16px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid #e0b97d;
+    }
+
+    .basic-info {
+      display: flex;
+      gap: 32px;
+      align-items: flex-start;
+      justify-content: flex-start;
+    }
+
+    .profile-image {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid #e0b97d;
+    }
+
+    .info-center {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      flex: 1.2;
+      min-width: 200px;
+    }
+
+    .info-right {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      flex: 1;
+      min-width: 180px;
+    }
+
+    .info-label {
+      color: #e0b97d;
+      font-weight: bold;
+      margin-bottom: 4px;
+    }
+
+    .info-value {
+      color: #fff;
+    }
+
+    .stack-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .stack-tag {
+      background: #e0b97d;
+      color: #726e6b;
+      padding: 4px 12px;
+      border-radius: 16px;
+      font-size: 0.9rem;
+    }
+
+    .lang-list, .cert-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 16px;
+    }
+
+    .lang-item, .cert-item {
+      background: #f3eee9;
+      padding: 16px;
+      border-radius: 8px;
+      color: #222;
+    }
+
+    .project-tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 24px;
+      border-bottom: 2px solid #bdb8b2;
+      padding-bottom: 8px;
+    }
+
+    .project-tab-btn {
+      padding: 12px 24px;
+      border: none;
+      border-radius: 8px 8px 0 0;
+      background: #bdb8b2;
+      color: #726e6b;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .project-tab-btn.active {
+      background: #e0b97d;
+      color: #fff;
+    }
+
+    .project-detail {
+      display: flex;
+      gap: 40px;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      background: none;
+      padding: 0;
+      border-radius: 0;
+      color: inherit;
+    }
+
+    .project-info {
+      flex: 1;
+      min-width: 300px;
+      margin: 0;
+      padding: 0;
+    }
+
+    .project-title {
+      color: #e0b97d;
+      font-size: 1.5rem;
+      font-weight: bold;
+      margin-bottom: 16px;
+    }
+
+    .project-desc {
+      color: #fff;
+      font-size: 1rem;
+      line-height: 1.6;
+      white-space: pre-wrap;
+      margin-top: 0;
+    }
+
+    .project-image-container {
+      flex: 1;
+      min-width: 300px;
+      text-align: center;
+    }
+
+    .project-image {
+      max-width: 100%;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    }
+
+    .self-intro {
+      line-height: 1.6;
+      white-space: pre-wrap;
+      color: #fff;
+    }
+
+    .contact-info {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #e0b97d;
+    }
+
+    .cert-section, .lang-section {
+      background: #726e6b;
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 24px;
+    }
+
+    .cert-tabs, .lang-tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 24px;
+      border-bottom: 2px solid #bdb8b2;
+      padding-bottom: 8px;
+      flex-wrap: wrap;
+    }
+
+    .cert-tab-btn, .lang-tab-btn {
+      padding: 8px 16px;
+      border: none;
+      border-radius: 8px 8px 0 0;
+      background: #bdb8b2;
+      color: #726e6b;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .cert-tab-btn.active, .lang-tab-btn.active {
+      background: #e0b97d;
+      color: #fff;
+    }
+
+    .cert-detail, .lang-detail {
+      background: #726e6b;
+      padding: 0;
+      border-radius: 8px;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      font-size: 1rem;
+      line-height: 1.6;
+    }
+
+    .lang-info, .cert-info {
+      margin: 0;
+      padding: 0;
+    }
+
+    .lang-test, .cert-name {
+      font-size: 1rem;
+      font-weight: bold;
+      color: #e0b97d;
+      margin-top: 0;
+    }
+
+    .lang-score, .cert-org, .cert-date {
+      color: #fff;
+      font-size: 1rem;
+      margin-left: 0;
+      margin-top: 0;
+    }
+  </style>
+</head>
+<body>
+  <div id="header-container"></div>
+  <div class="portfolio-container">
+    <div class="portfolio-header" style="display:flex; align-items:center; justify-content:center; margin-bottom:32px; position:relative;">
+      <h1 style="color:#e0b97d; margin:0; text-align:center; width:100%;">포트폴리오 상세</h1>
+      <div id="editButtons" style="position:absolute; right:0; display:flex; gap:8px; display:none;">
+        <button onclick="location.href='write.html?id=' + postId" 
+          style="background:#e0b97d; color:#232323; border:none; border-radius:8px; padding:10px 24px; font-weight:bold; font-size:1rem; cursor:pointer;">
+          수정
+        </button>
+        <button onclick="deletePortfolio()" 
+          style="background:#ff4d4d; color:#fff; border:none; border-radius:8px; padding:10px 24px; font-weight:bold; font-size:1rem; cursor:pointer;">
+          삭제
+        </button>
+      </div>
+    </div>
+    <div id="portfolio-detail"></div>
+  </div>
+
+  <script>
+    fetch('../header/header.html')
+      .then(res => res.text())
+      .then(data => {
+        const headerContainer = document.getElementById('header-container');
+        headerContainer.innerHTML = data;
+        
+        // 로고 클릭 이벤트 추가
+        const logo = headerContainer.querySelector('.logo');
+        if (logo) {
+          logo.onclick = () => {
+            window.location.href = '../index.html';
+          };
+        }
+
+        // 로그인/회원가입 버튼 제거
+        const loginBtn = headerContainer.querySelector('.login-btn');
+        const signupBtn = headerContainer.querySelector('.signup-btn');
+        if (loginBtn) loginBtn.remove();
+        if (signupBtn) signupBtn.remove();
+
+        // 헤더 스타일을 회원가입 페이지처럼 가운데 정렬로 변경
+        const header = headerContainer.querySelector('header');
+        if (header) {
+          header.style.justifyContent = 'center';
+        }
+      });
+
+    // URL에서 ID 가져오기
+    const urlParams = new URLSearchParams(window.location.search);
+    const postId = urlParams.get('id');
+
+    // 글 상세 정보 불러오기
+    fetch(`http://localhost:8080/api/posts/${postId}`)
+      .then(res => {
+        console.log('서버 응답 상태:', res.status);
+        if (!res.ok) {
+          throw new Error('포트폴리오를 찾을 수 없습니다.');
+        }
+        return res.json();
+      })
+      .then(data => {
+        console.log('서버 응답 데이터:', data);
+        if (!data || !data.content) {
+          throw new Error('포트폴리오 데이터가 올바르지 않습니다.');
+        }
+
+        let p;
+        try {
+          p = JSON.parse(data.content);
+          console.log('파싱된 데이터:', p);
+        } catch (e) {
+          console.error('JSON 파싱 에러:', e);
+          throw new Error('포트폴리오 데이터 형식이 올바르지 않습니다.');
+        }
+
+        if (!p.name) {
+          throw new Error('포트폴리오 데이터가 올바르지 않습니다.');
+        }
+
+        const detail = document.getElementById('portfolio-detail');
+        
+        detail.innerHTML = `
+          <div class="section">
+            <div class="section-title">기본 정보</div>
+            <div class="basic-info">
+              ${p.photo ? `<img src="${p.photo}" alt="프로필" class="profile-image" />` : ''}
+              <div class="info-center">
+                <div class="info-item">
+                  <div class="info-label">이름</div>
+                  <div class="info-value">${p.name}</div>
+                </div>
+                <div class="info-item">
+                  <div class="info-label">나이</div>
+                  <div class="info-value">${p.age}세</div>
+                </div>
+                <div class="info-item">
+                  <div class="info-label">학력</div>
+                  <div class="info-value">${p.edu}</div>
+                </div>
+                <div class="info-item">
+                  <div class="info-label">기술 스택</div>
+                  <div class="stack-tags">
+                    ${(p.stack || '').split(' ').map(tag => tag ? `<span class="stack-tag">${tag}</span>` : '').join('')}
+                  </div>
+                </div>
+              </div>
+              <div class="info-right">
+                <div class="info-item">
+                  <div class="info-label">경력</div>
+                  <div class="info-value">${p.career}</div>
+                </div>
+                ${p.contact ? `
+                <div class="info-item">
+                  <div class="info-label">연락처</div>
+                  <div class="info-value">${p.contact}</div>
+                </div>
+                ` : ''}
+                ${p.hope ? `
+                <div class="info-item">
+                  <div class="info-label">희망 분야</div>
+                  <div class="info-value">${p.hope}</div>
+                </div>
+                ` : ''}
+                ${p.github ? `
+                <div class="info-item">
+                  <div class="info-label">깃 주소</div>
+                  <div class="info-value"><a href="${p.github}" target="_blank" style="color:#e0b97d; text-decoration:underline;">${p.github}</a></div>
+                </div>
+                ` : ''}
+        </div>
+        </div>
+        </div>
+
+          ${p.langs && p.langs.length > 0 ? `
+            <div class="section lang-section">
+              <div class="section-title">어학점수</div>
+              <div class="lang-tabs" id="lang-tabs"></div>
+              <div id="lang-detail-area"></div>
+        </div>
+          ` : ''}
+
+          ${p.certs && p.certs.length > 0 ? `
+            <div class="section cert-section">
+              <div class="section-title">자격증</div>
+              <div class="cert-tabs" id="cert-tabs"></div>
+              <div id="cert-detail-area"></div>
+        </div>
+          ` : ''}
+
+          ${p.projects && p.projects.length > 0 ? `
+            <div class="section project-section">
+              <div class="section-title">프로젝트</div>
+              <div class="project-tabs" id="project-tabs"></div>
+              <div id="project-detail-area"></div>
+        </div>
+          ` : ''}
+
+          ${p.selfIntro ? `
+            <div class="section">
+              <div class="section-title">자기소개서</div>
+              <div class="self-intro">${p.selfIntro}</div>
+        </div>
+          ` : ''}
+      `;
+
+      // 프로젝트 탭/상세 렌더링
+        if (p.projects && p.projects.length > 0) {
+          const projects = p.projects;
+      const tabs = document.getElementById('project-tabs');
+      const detailArea = document.getElementById('project-detail-area');
+          
+      function renderTabs() {
+        tabs.innerHTML = '';
+        projects.forEach((proj, idx) => {
+          const btn = document.createElement('button');
+          btn.textContent = proj.title;
+              btn.className = 'project-tab-btn' + (idx === 0 ? ' active' : '');
+          btn.onclick = () => selectProject(idx);
+          tabs.appendChild(btn);
+        });
+      }
+
+      function selectProject(idx) {
+            // 탭 버튼 상태 업데이트
+        Array.from(tabs.children).forEach((btn, i) => {
+              btn.className = 'project-tab-btn' + (i === idx ? ' active' : '');
+        });
+
+            // 프로젝트 상세 내용 업데이트
+        const proj = projects[idx];
+        detailArea.innerHTML = `
+              <div class="project-detail">
+                <div class="project-info">
+                  <div class="project-title">${proj.title}</div>
+                  <div class="project-desc">${proj.desc}</div>
+                </div>
+                ${proj.img ? `
+                  <div class="project-image-container">
+                    <img src="${proj.img}" alt="${proj.title}" class="project-image" />
+                  </div>
+                ` : ''}
+              </div>
+            `;
+          }
+
+          renderTabs();
+          selectProject(0);
+        }
+
+        // 어학점수 탭/상세 렌더링
+        if (p.langs && p.langs.length > 0) {
+          const langs = p.langs;
+          const tabs = document.getElementById('lang-tabs');
+          const detailArea = document.getElementById('lang-detail-area');
+          
+          function renderLangTabs() {
+            tabs.innerHTML = '';
+            langs.forEach((lang, idx) => {
+              const btn = document.createElement('button');
+              btn.textContent = lang.test;
+              btn.className = 'lang-tab-btn' + (idx === 0 ? ' active' : '');
+              btn.onclick = () => selectLang(idx);
+              tabs.appendChild(btn);
+            });
+          }
+
+          function selectLang(idx) {
+            Array.from(tabs.children).forEach((btn, i) => {
+              btn.className = 'lang-tab-btn' + (i === idx ? ' active' : '');
+            });
+
+            const lang = langs[idx];
+            detailArea.innerHTML = `              <div class="lang-detail">
+                <div class="lang-info">
+                  <div class="lang-test">${lang.test}</div>
+                  <div class="lang-score">${lang.score}</div>
+                </div>
+            </div>
+            `;
+          }
+
+          renderLangTabs();
+          selectLang(0);
+        }
+
+        // 자격증 탭/상세 렌더링
+        if (p.certs && p.certs.length > 0) {
+          const certs = p.certs;
+          const tabs = document.getElementById('cert-tabs');
+          const detailArea = document.getElementById('cert-detail-area');
+          
+          function renderCertTabs() {
+            tabs.innerHTML = '';
+            certs.forEach((cert, idx) => {
+              const btn = document.createElement('button');
+              btn.textContent = cert.name;
+              btn.className = 'cert-tab-btn' + (idx === 0 ? ' active' : '');
+              btn.onclick = () => selectCert(idx);
+              tabs.appendChild(btn);
+            });
+          }
+
+          function selectCert(idx) {
+            Array.from(tabs.children).forEach((btn, i) => {
+              btn.className = 'cert-tab-btn' + (i === idx ? ' active' : '');
+            });
+
+            const cert = certs[idx];
+            detailArea.innerHTML = `
+              <div class="cert-detail">
+                <div class="cert-info">
+                  <div class="cert-name">${cert.name}</div>
+                  <div class="cert-org">${cert.org}</div>
+                  <div class="cert-date">${cert.date}</div>
+            </div>
+          </div>
+        `;
+      }
+
+          renderCertTabs();
+          selectCert(0);
+        }
+
+        // 현재 로그인한 사용자와 글 작성자 비교
+        const currentUser = localStorage.getItem('username') || sessionStorage.getItem('username');
+        const postAuthor = data.author;
+        
+        // 로그인한 사용자가 있고, 글 작성자와 일치할 때만 수정/삭제 버튼 표시
+        if (currentUser && currentUser === postAuthor) {
+          document.getElementById('editButtons').style.display = 'flex';
+        }
+      })
+      .catch(err => {
+        console.error('Error:', err);
+        document.getElementById('portfolio-detail').innerHTML = `
+          <div style="padding:60px; text-align:center; color:#e0b97d;">
+            <div style="margin-bottom:16px;">포트폴리오 정보를 찾을 수 없습니다.</div>
+            <button onclick="location.href='list.html'" 
+              style="background:#e0b97d; color:#232323; border:none; border-radius:8px; padding:10px 24px; font-weight:bold; font-size:1rem; cursor:pointer;">
+              목록으로 돌아가기
+            </button>
+          </div>`;
+      });
+
+    async function deletePortfolio() {
+      if (!confirm('정말 삭제하시겠습니까?')) return;
+      
+      try {
+        const response = await fetch(`http://localhost:8080/api/posts/${postId}`, {
+          method: 'DELETE'
+        });
+
+        if (!response.ok) throw new Error('삭제 실패');
+        
+        alert('삭제되었습니다!');
+        window.location.href = 'list.html';
+      } catch (err) {
+        alert('삭제 실패: ' + err);
+      }
+    }
+  </script>
+</body>
+</html> 
