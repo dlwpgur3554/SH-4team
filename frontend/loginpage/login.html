@@ -5,12 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>로그인</title>
   <link rel="stylesheet" href="login.css" />
-  <link rel="stylesheet" href="../header/header.css" />
-  <link rel="stylesheet" href="../sidebar/sidebar.css" />
+  <link rel="stylesheet" href="login-header.css" />
 </head>
 <body>
   <div id="header-container"></div>
-  <div id="sidebar-container"></div>
 
   <div class="container">
     <div class="box">
@@ -22,7 +20,10 @@
 
         <label class="label" for="password">비밀번호</label>
         <input type="password" id="password" class="input" required />
-
+        <div class="remember-section">
+          <input type="checkbox" id="remember" />
+          <label for="remember">로그인 상태 유지</label>
+        </div>
         <button type="submit" class="button">로그인</button>
       </form>
     </div>
@@ -30,7 +31,7 @@
 
   <script>
     // ✅ 헤더 & 사이드바 불러오기
-    fetch('../header/header.html')
+    fetch('login-header.html')
       .then(res => res.text())
       .then(data => {
         document.getElementById('header-container').innerHTML = data;

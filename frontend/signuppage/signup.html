@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>회원가입</title>
   <link rel="stylesheet" href="signup.css" />
-  <link rel="stylesheet" href="../header/header.css" />
+  <link rel="stylesheet" href="signup-header.css" />
 </head>
 <body>
   <div id="header-container"></div>
@@ -32,7 +32,7 @@
 
   <script>
     // ✅ 헤더 불러오기
-    fetch('../header/header.html')
+    fetch('signup-header.html')
       .then(res => res.text())
       .then(data => {
         document.getElementById('header-container').innerHTML = data;

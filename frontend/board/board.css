@@ -13,7 +13,7 @@ body {
 #sidebar-container {
   width: 10%;
   min-width: 200px;
-  background-color: white;
+  background-color: #f3eee9;
 }
 
 .content-box {
@@ -83,7 +83,7 @@ body {
 }
 .sidebar {
   width: 200px;
-  background-color: white;
+  background-color: #f3eee9;
   padding: 20px;
   min-height: 100vh;
   box-sizing: border-box;

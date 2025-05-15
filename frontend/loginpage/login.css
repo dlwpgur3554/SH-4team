@@ -1,20 +1,20 @@
 body, html {
   margin: 0;
   padding: 0;
-  height: 100%;
+  height: auto;
   font-family: "Arial", sans-serif;
   background-color: #f3eee9;
+  overflow-x: hidden;
 }
 
 .content {
-  margin-left: 200px;
-  width: calc(100% - 200px);
-  height: 100vh;
-  padding-top: 150px;
-  background-color: #f3eee9;
+  margin-top: 150px;            /* ✅ 헤더 높이만큼 내려줌 */
+  width: 100%;
+  min-height: calc(100vh - 150px);
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;      /* ✅ 위에서부터 시작 (스크롤 가능하게) */
+  padding: 40px 0;              /* ✅ 여유 공간 추가 */
   box-sizing: border-box;
 }
 
@@ -127,4 +127,19 @@ body, html {
   #sidebar-container {
       display: none;
   }
+}
+
+.remember-section {
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
+  gap: 8px;
+  color: #e8e3dc;
+  font-size: 15px;
+}
+.remember-section input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  accent-color: #e8e3dc;
+  cursor: pointer;
 }
