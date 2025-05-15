@@ -1,0 +1,54 @@
+body {
+  margin: 0;
+  background-color: #faeedf;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.logo-container {
+  animation: roll-in 2s ease-out forwards;
+}
+
+.logo {
+  width: 500px;
+  height: auto;
+}
+
+.team-footer {
+  position: absolute;
+  bottom: 20px;
+  width: 100%;
+  text-align: center;
+  font-size: 14px;
+  color: #888;
+  font-family: "Noto Sans KR", sans-serif;
+  opacity: 0;
+  animation: fade-in 1s ease-in forwards;
+  animation-delay: 2s; /* 로고 애니메이션 시간과 동일하게 맞춤 */
+  pointer-events: none;
+}
+
+/* 왼쪽에서 가운데로 구르는 애니메이션 */
+@keyframes roll-in {
+  0% {
+    transform: translateX(-100vw) rotate(-360deg);
+    opacity: 0;
+  }
+  60% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(0) rotate(0deg);
+    opacity: 1;
+  }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}

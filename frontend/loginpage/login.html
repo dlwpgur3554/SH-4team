@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>로그인</title>
+  <link rel="stylesheet" href="login.css" />
+  <link rel="stylesheet" href="../header/header.css" />
+  <link rel="stylesheet" href="../sidebar/sidebar.css" />
+</head>
+<body>
+  <div id="header-container"></div>
+  <div id="sidebar-container"></div>
+
+  <div class="container">
+    <div class="box">
+      <h2 class="title">로그인</h2>
+
+      <form id="login-form">
+        <label class="label" for="username">아이디</label>
+        <input type="text" id="username" class="input" required />
+
+        <label class="label" for="password">비밀번호</label>
+        <input type="password" id="password" class="input" required />
+
+        <button type="submit" class="button">로그인</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // ✅ 헤더 & 사이드바 불러오기
+    fetch('../header/header.html')
+      .then(res => res.text())
+      .then(data => {
+        document.getElementById('header-container').innerHTML = data;
+      });
+
+    fetch('../sidebar/sidebar.html')
+      .then(res => res.text())
+      .then(data => {
+        document.getElementById('sidebar-container').innerHTML = data;
+      });
+
+    // ✅ 로그인 이벤트 처리
+    document.getElementById("login-form").addEventListener("submit", async function(e) {
+      e.preventDefault();
+
+      const username = document.getElementById("username").value;
+      const password = document.getElementById("password").value;
+
+      const response = await fetch("http://localhost:8081/api/users/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ username, password })
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        localStorage.setItem("token", data.token);
+        alert("로그인 성공!");
+
+        // ✅ 수정된 경로로 이동
+        window.location.href = "/frontend/MyPage/myposts/myposts.html";
+      } else {
+        alert("로그인 실패! 아이디 또는 비밀번호를 확인하세요.");
+      }
+    });
+  </script>
+</body>
+</html>

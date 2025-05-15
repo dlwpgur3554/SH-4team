@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Edit Profile</title>
+  <link rel="stylesheet" href="../common/common.css" />
+  <link rel="stylesheet" href="editprofile.css" />
+</head>
+<body>
+  <div class="main-content">
+    <div class="edit-box">
+      <div id="password-section">
+        <p class="info-text">회원 정보는 기존 비밀번호를 입력하셔야 수정이 가능합니다.</p>
+        <input type="password" id="passwordInput" class="input-box" placeholder="기존 비밀번호를 입력하세요" />
+        <p class="error-text" id="errorText" style="display: none;">비밀번호를 입력해주세요!</p>
+        <button id="checkPasswordBtn">확인</button>
+      </div>
+
+      <div id="edit-section" style="display: none;">
+        <label>이메일 변경</label>
+        <input type="email" id="email" class="input-box" placeholder="변경할 이메일 입력" />
+        <button type="button" disabled>인증하기 (예시)</button>
+
+        <label>새 비밀번호</label>
+        <input type="password" id="newPassword" class="input-box" placeholder="새 비밀번호 입력" />
+        <label>새 비밀번호 확인</label>
+        <input type="password" id="confirmPassword" class="input-box" placeholder="비밀번호 재입력" />
+
+        <label>전화번호 변경</label>
+        <input type="tel" class="input-box" placeholder="전화번호 입력 (선택)" disabled />
+
+        <button id="updateBtn">수정 완료</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const token = localStorage.getItem("token");
+
+    const checkPasswordBtn = document.getElementById("checkPasswordBtn");
+    const passwordInput = document.getElementById("passwordInput");
+    const errorText = document.getElementById("errorText");
+    const editSection = document.getElementById("edit-section");
+
+    checkPasswordBtn.addEventListener("click", () => {
+      if (passwordInput.value.trim() === "") {
+        errorText.style.display = "block";
+      } else {
+        errorText.style.display = "none";
+        editSection.style.display = "block";
+        passwordInput.disabled = true;
+        checkPasswordBtn.disabled = true;
+      }
+    });
+
+    document.getElementById("updateBtn").addEventListener("click", async function () {
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("newPassword").value.trim();
+      const confirmPassword = document.getElementById("confirmPassword").value.trim();
+
+      if (!email || !password || !confirmPassword) {
+        alert("모든 항목을 입력해주세요.");
+        return;
+      }
+
+      if (password !== confirmPassword) {
+        alert("비밀번호가 일치하지 않습니다.");
+        return;
+      }
+
+      try {
+        const res = await fetch("http://localhost:8081/api/users/update", {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
+          },
+          body: JSON.stringify({
+            email,
+            password
+          })
+        });
+
+        if (res.ok) {
+          alert("회원정보가 수정되었습니다.");
+          location.href = "/frontend/MyPage/myprofile/myprofile.html";
+        } else {
+          const err = await res.text();
+          alert("수정 실패: " + err);
+        }
+      } catch (e) {
+        alert("오류 발생: " + e.message);
+      }
+    });
+  </script>
+</body>
+</html>

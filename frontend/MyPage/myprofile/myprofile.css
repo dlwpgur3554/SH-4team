@@ -1,0 +1,23 @@
+.profile-image-label {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.profile-image {
+  width: 100px;
+  height: 100px;
+  background-color: #666;
+  border-radius: 50%;
+  background-size: cover;
+  background-position: center;
+}
+
+.photo-btn {
+  background-color: #F0E7DD;
+  color: #2B2B2B;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+}

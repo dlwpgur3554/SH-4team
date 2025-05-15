@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>회원 탈퇴</title>
+  <link rel="stylesheet" href="common.css" />
+  <link rel="stylesheet" href="withdraw.css" />
+</head>
+<body>
+  <div class="container">
+    <div class="main-content">
+      <div class="content-box">
+        <h2>회원 탈퇴</h2>
+        <p class="warning-text">
+          탈퇴 시 작성한 게시글 및 정보는 모두 삭제되며, 복구가 불가능합니다.
+        </p>
+
+        <input type="password" id="withdrawPassword" class="input-box" placeholder="비밀번호를 입력하세요" />
+        
+        <div class="checkbox-area">
+          <input type="checkbox" id="confirmCheckbox" />
+          <label for="confirmCheckbox">정말로 탈퇴하시겠습니까?</label>
+        </div>
+
+        <p class="error-text" id="errorText">비밀번호 입력과 동의가 필요합니다.</p>
+
+        <button class="withdraw-btn" onclick="handleWithdraw()">탈퇴하기</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function handleWithdraw() {
+      const password = document.getElementById("withdrawPassword").value.trim();
+      const checkbox = document.getElementById("confirmCheckbox").checked;
+      const errorText = document.getElementById("errorText");
+
+      if (!password || !checkbox) {
+        errorText.style.display = "block";
+      } else {
+        errorText.style.display = "none";
+        const confirmed = confirm("정말 탈퇴하시겠습니까?");
+        if (confirmed) {
+          alert("회원 탈퇴가 완료되었습니다.");
+        }
+      }
+    }
+  </script>
+</body>
+</html>

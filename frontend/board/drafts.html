@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>임시 저장 글</title>
+  <link rel="stylesheet" href="board.css" />
+  <link rel="stylesheet" href="../../header/header.css" />
+</head>
+<body>
+  <div id="header-container"></div>
+
+  <div class="main-layout">
+    <div id="sidebar-container"></div>
+
+    <div class="content-box">
+      <h2 class="title">임시 저장 글</h2>
+      <p class="subtitle">임시 저장 글 목록</p>
+
+      <div class="post-list" id="draft-list">
+        <p>불러오는 중...</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ✅ 헤더 & 사이드바
+    fetch('../../header/header.html')
+      .then(res => res.text())
+      .then(data => {
+        document.getElementById('header-container').innerHTML = data;
+      });
+
+    fetch('board-sidebar.html')
+      .then(res => res.text())
+      .then(data => {
+        document.getElementById('sidebar-container').innerHTML = data;
+      });
+
+    // ✅ 임시 글 불러오기
+    const token = localStorage.getItem("token");
+    const draftList = document.getElementById("draft-list");
+
+    if (!token) {
+      alert("로그인이 필요합니다.");
+      location.href = "/frontend/loginpage/login.html";
+    } else {
+      fetch("http://localhost:8081/api/posts/drafts", {
+        method: "GET",
+        headers: {
+          "Authorization": `Bearer ${token}`
+        }
+      })
+      .then(res => {
+        if (!res.ok) throw new Error("불러오기 실패");
+        return res.json();
+      })
+      .then(drafts => {
+        if (!drafts.length) {
+          draftList.innerHTML = "<p>임시 저장된 글이 없습니다.</p>";
+          return;
+        }
+
+        draftList.innerHTML = "<ul>" + drafts.map(d => `
+          <li id="draft-${d.id}">
+            ${d.title}
+            <button onclick="loadDraft(${d.id})">불러오기</button>
+            <button onclick="deleteDraft(${d.id})">삭제</button>
+          </li>
+        `).join("") + "</ul>";
+      })
+      .catch(err => {
+        draftList.innerHTML = `<p>에러: ${err.message}</p>`;
+      });
+    }
+
+    function loadDraft(id) {
+      alert(`임시 글 ${id}을 불러옵니다.`);
+      // TODO: 작성 페이지로 이동 후 채워넣기 구현 필요
+    }
+
+    function deleteDraft(id) {
+      const confirmed = confirm("정말 삭제하시겠습니까?");
+      if (!confirmed) return;
+
+      fetch(`http://localhost:8081/api/posts/drafts/${id}`, {
+        method: "DELETE",
+        headers: {
+          "Authorization": `Bearer ${token}`
+        }
+      })
+      .then(res => {
+        if (res.ok) {
+          document.getElementById(`draft-${id}`).remove();
+          alert("삭제되었습니다.");
+        } else {
+          alert("삭제 실패");
+        }
+      });
+    }
+  </script>
+</body>
+</html>
